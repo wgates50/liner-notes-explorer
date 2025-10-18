@@ -2,11 +2,10 @@ import { useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { Header } from "@/components/Header";
 import { RoleChips } from "@/components/RoleChips";
-import { CreditPanel } from "@/components/CreditPanel";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { User, Music2, Disc3 } from "lucide-react";
+import { User, Music2, Disc3, ChevronDown, ChevronUp, ExternalLink } from "lucide-react";
 import { toast } from "sonner";
 
 // Mock data - in real app, this would come from API
@@ -79,7 +78,7 @@ const Artist = () => {
   
   const [crateMode, setCrateMode] = useState(false);
   const [activeRole, setActiveRole] = useState<string>();
-  const [selectedSong, setSelectedSong] = useState<any>(null);
+  const [expandedSongs, setExpandedSongs] = useState<Set<string>>(new Set());
   const [discographyType, setDiscographyType] = useState<string>("All");
   const [discographyRole, setDiscographyRole] = useState<string>();
 
@@ -92,9 +91,19 @@ const Artist = () => {
     window.scrollTo(0, 0);
   };
 
-  const handleSongClick = (song: any) => {
-    setSelectedSong({
-      ...song,
+  const toggleSongExpansion = (songTitle: string) => {
+    const newExpanded = new Set(expandedSongs);
+    if (newExpanded.has(songTitle)) {
+      newExpanded.delete(songTitle);
+    } else {
+      newExpanded.add(songTitle);
+    }
+    setExpandedSongs(newExpanded);
+  };
+
+  const getSongCredits = (song: any) => {
+    // Mock credits - in real app, this would come from API
+    return {
       producers: [
         { name: "Quincy Jones", role: "Producer" },
         { name: "Bruce Swedien", role: "Co-producer" },
@@ -104,16 +113,17 @@ const Artist = () => {
         { name: "Michael Jackson", role: "Writer" },
       ],
       players: [
-        { name: "Greg Phillinganes", role: "Keyboards", instrument: "Piano, Synthesizer" },
-        { name: "Louis Johnson", role: "Bass", instrument: "Bass Guitar" },
-        { name: "Jeff Porcaro", role: "Drums", instrument: "Drums" },
+        { name: "Greg Phillinganes", instrument: "Piano, Synthesizer" },
+        { name: "Louis Johnson", instrument: "Bass Guitar" },
+        { name: "Jeff Porcaro", instrument: "Drums" },
       ],
+      label: "Epic Records",
       streamingLinks: {
         spotify: "https://open.spotify.com/track/5ChkMS8OtdzJeqyybCc9R5",
         apple: "https://music.apple.com/us/album/thriller/269572838?i=269573524",
         tidal: "https://tidal.com/browse/track/5929143"
       }
-    });
+    };
   };
 
   const filteredDiscography = mockArtistData.discography.filter(item => {
@@ -160,21 +170,148 @@ const Artist = () => {
               {(activeRole 
                 ? mockArtistData.topSongsByRole[activeRole.toLowerCase() as keyof typeof mockArtistData.topSongsByRole] || []
                 : mockArtistData.topSongsByRole.producer
-              ).map((song, idx) => (
-                <Button
-                  key={idx}
-                  variant="ghost"
-                  className="w-full justify-start text-left h-auto py-3"
-                  onClick={() => handleSongClick(song)}
-                >
-                  <div className="flex-1">
-                    <div className="font-medium">{song.title}</div>
-                    <div className="text-sm text-muted-foreground">
-                      {song.artist} • {song.year}
-                    </div>
+              ).map((song, idx) => {
+                const isExpanded = expandedSongs.has(song.title);
+                const credits = isExpanded ? getSongCredits(song) : null;
+                
+                return (
+                  <div key={idx} className="border border-border rounded-lg overflow-hidden">
+                    <Button
+                      variant="ghost"
+                      className="w-full justify-between text-left h-auto py-3 hover:bg-secondary"
+                      onClick={() => toggleSongExpansion(song.title)}
+                    >
+                      <div className="flex-1">
+                        <div className="font-medium">{song.title}</div>
+                        <div className="text-sm text-muted-foreground">
+                          {song.artist} • {song.year}
+                        </div>
+                      </div>
+                      {isExpanded ? (
+                        <ChevronUp className="h-4 w-4 text-muted-foreground" />
+                      ) : (
+                        <ChevronDown className="h-4 w-4 text-muted-foreground" />
+                      )}
+                    </Button>
+                    
+                    {isExpanded && credits && (
+                      <div className="px-4 pb-4 space-y-4 bg-card/50">
+                        {/* Producers */}
+                        {credits.producers.length > 0 && (
+                          <div>
+                            <h4 className="text-xs font-semibold text-muted-foreground mb-2">
+                              PRODUCERS
+                            </h4>
+                            <div className="flex flex-wrap gap-2">
+                              {credits.producers.map((producer, pidx) => (
+                                <Badge
+                                  key={pidx}
+                                  variant="role"
+                                  onClick={() => handleCreditClick(producer.name)}
+                                >
+                                  {producer.name}
+                                  {producer.role && (
+                                    <span className="ml-1 text-xs opacity-70">
+                                      ({producer.role})
+                                    </span>
+                                  )}
+                                </Badge>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+
+                        {/* Writers */}
+                        {credits.writers.length > 0 && (
+                          <div>
+                            <h4 className="text-xs font-semibold text-muted-foreground mb-2">
+                              WRITERS
+                            </h4>
+                            <div className="flex flex-wrap gap-2">
+                              {credits.writers.map((writer, widx) => (
+                                <Badge
+                                  key={widx}
+                                  variant="role"
+                                  onClick={() => handleCreditClick(writer.name)}
+                                >
+                                  {writer.name}
+                                </Badge>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+
+                        {/* Players */}
+                        {credits.players.length > 0 && (
+                          <div>
+                            <h4 className="text-xs font-semibold text-muted-foreground mb-2">
+                              INSTRUMENTS
+                            </h4>
+                            <div className="flex flex-wrap gap-2">
+                              {credits.players.map((player, plidx) => (
+                                <Badge
+                                  key={plidx}
+                                  variant="role"
+                                  onClick={() => handleCreditClick(player.name)}
+                                >
+                                  {player.name}
+                                  {player.instrument && (
+                                    <span className="ml-1 text-xs opacity-70">
+                                      ({player.instrument})
+                                    </span>
+                                  )}
+                                </Badge>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+
+                        {/* Label */}
+                        {credits.label && (
+                          <div>
+                            <h4 className="text-xs font-semibold text-muted-foreground mb-2">
+                              LABEL
+                            </h4>
+                            <Badge variant="secondary">{credits.label}</Badge>
+                          </div>
+                        )}
+
+                        {/* Streaming Links */}
+                        {credits.streamingLinks && (
+                          <div className="pt-2 border-t border-border">
+                            <h4 className="text-xs font-semibold text-muted-foreground mb-2">
+                              LISTEN
+                            </h4>
+                            <div className="flex flex-wrap gap-2">
+                              {credits.streamingLinks.spotify && (
+                                <Button variant="outline" size="sm" asChild>
+                                  <a href={credits.streamingLinks.spotify} target="_blank" rel="noopener noreferrer">
+                                    Spotify <ExternalLink className="ml-1 h-3 w-3" />
+                                  </a>
+                                </Button>
+                              )}
+                              {credits.streamingLinks.apple && (
+                                <Button variant="outline" size="sm" asChild>
+                                  <a href={credits.streamingLinks.apple} target="_blank" rel="noopener noreferrer">
+                                    Apple Music <ExternalLink className="ml-1 h-3 w-3" />
+                                  </a>
+                                </Button>
+                              )}
+                              {credits.streamingLinks.tidal && (
+                                <Button variant="outline" size="sm" asChild>
+                                  <a href={credits.streamingLinks.tidal} target="_blank" rel="noopener noreferrer">
+                                    TIDAL <ExternalLink className="ml-1 h-3 w-3" />
+                                  </a>
+                                </Button>
+                              )}
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    )}
                   </div>
-                </Button>
-              ))}
+                );
+              })}
             </div>
           </CardContent>
         </Card>
@@ -215,22 +352,151 @@ const Artist = () => {
               ))}
             </div>
             <div className="space-y-2">
-              {filteredDiscography.map((item, idx) => (
-                <Button
-                  key={idx}
-                  variant="ghost"
-                  className="w-full justify-start text-left h-auto py-3"
-                  onClick={() => handleSongClick(item)}
-                >
-                  <div className="flex-1">
-                    <div className="font-medium">{item.title}</div>
-                    <div className="text-sm text-muted-foreground">
-                      {item.artist} • {item.year} • {item.type}
-                    </div>
+              {filteredDiscography.map((item, idx) => {
+                const isExpanded = expandedSongs.has(item.title);
+                const credits = isExpanded ? getSongCredits(item) : null;
+                
+                return (
+                  <div key={idx} className="border border-border rounded-lg overflow-hidden">
+                    <Button
+                      variant="ghost"
+                      className="w-full justify-between text-left h-auto py-3 hover:bg-secondary"
+                      onClick={() => toggleSongExpansion(item.title)}
+                    >
+                      <div className="flex-1 flex items-center gap-3">
+                        <div className="flex-1">
+                          <div className="font-medium">{item.title}</div>
+                          <div className="text-sm text-muted-foreground">
+                            {item.artist} • {item.year} • {item.type}
+                          </div>
+                        </div>
+                        <Badge variant="secondary">{item.role}</Badge>
+                      </div>
+                      {isExpanded ? (
+                        <ChevronUp className="h-4 w-4 text-muted-foreground ml-2" />
+                      ) : (
+                        <ChevronDown className="h-4 w-4 text-muted-foreground ml-2" />
+                      )}
+                    </Button>
+                    
+                    {isExpanded && credits && (
+                      <div className="px-4 pb-4 space-y-4 bg-card/50">
+                        {/* Producers */}
+                        {credits.producers.length > 0 && (
+                          <div>
+                            <h4 className="text-xs font-semibold text-muted-foreground mb-2">
+                              PRODUCERS
+                            </h4>
+                            <div className="flex flex-wrap gap-2">
+                              {credits.producers.map((producer, pidx) => (
+                                <Badge
+                                  key={pidx}
+                                  variant="role"
+                                  onClick={() => handleCreditClick(producer.name)}
+                                >
+                                  {producer.name}
+                                  {producer.role && (
+                                    <span className="ml-1 text-xs opacity-70">
+                                      ({producer.role})
+                                    </span>
+                                  )}
+                                </Badge>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+
+                        {/* Writers */}
+                        {credits.writers.length > 0 && (
+                          <div>
+                            <h4 className="text-xs font-semibold text-muted-foreground mb-2">
+                              WRITERS
+                            </h4>
+                            <div className="flex flex-wrap gap-2">
+                              {credits.writers.map((writer, widx) => (
+                                <Badge
+                                  key={widx}
+                                  variant="role"
+                                  onClick={() => handleCreditClick(writer.name)}
+                                >
+                                  {writer.name}
+                                </Badge>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+
+                        {/* Players */}
+                        {credits.players.length > 0 && (
+                          <div>
+                            <h4 className="text-xs font-semibold text-muted-foreground mb-2">
+                              INSTRUMENTS
+                            </h4>
+                            <div className="flex flex-wrap gap-2">
+                              {credits.players.map((player, plidx) => (
+                                <Badge
+                                  key={plidx}
+                                  variant="role"
+                                  onClick={() => handleCreditClick(player.name)}
+                                >
+                                  {player.name}
+                                  {player.instrument && (
+                                    <span className="ml-1 text-xs opacity-70">
+                                      ({player.instrument})
+                                    </span>
+                                  )}
+                                </Badge>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+
+                        {/* Label */}
+                        {credits.label && (
+                          <div>
+                            <h4 className="text-xs font-semibold text-muted-foreground mb-2">
+                              LABEL
+                            </h4>
+                            <Badge variant="secondary">{credits.label}</Badge>
+                          </div>
+                        )}
+
+                        {/* Streaming Links */}
+                        {credits.streamingLinks && (
+                          <div className="pt-2 border-t border-border">
+                            <h4 className="text-xs font-semibold text-muted-foreground mb-2">
+                              LISTEN
+                            </h4>
+                            <div className="flex flex-wrap gap-2">
+                              {credits.streamingLinks.spotify && (
+                                <Button variant="outline" size="sm" asChild>
+                                  <a href={credits.streamingLinks.spotify} target="_blank" rel="noopener noreferrer">
+                                    Spotify <ExternalLink className="ml-1 h-3 w-3" />
+                                  </a>
+                                </Button>
+                              )}
+                              {credits.streamingLinks.apple && (
+                                <Button variant="outline" size="sm" asChild>
+                                  <a href={credits.streamingLinks.apple} target="_blank" rel="noopener noreferrer">
+                                    Apple Music <ExternalLink className="ml-1 h-3 w-3" />
+                                  </a>
+                                </Button>
+                              )}
+                              {credits.streamingLinks.tidal && (
+                                <Button variant="outline" size="sm" asChild>
+                                  <a href={credits.streamingLinks.tidal} target="_blank" rel="noopener noreferrer">
+                                    TIDAL <ExternalLink className="ml-1 h-3 w-3" />
+                                  </a>
+                                </Button>
+                              )}
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    )}
                   </div>
-                  <Badge variant="secondary">{item.role}</Badge>
-                </Button>
-              ))}
+                );
+              })}
             </div>
           </CardContent>
         </Card>
@@ -257,20 +523,6 @@ const Artist = () => {
           </CardContent>
         </Card>
 
-        {/* Expanded Credit Panel */}
-        {selectedSong && (
-          <CreditPanel
-            songTitle={selectedSong.title}
-            album={selectedSong.artist}
-            year={selectedSong.year}
-            producers={selectedSong.producers}
-            writers={selectedSong.writers}
-            players={selectedSong.players}
-            streamingLinks={selectedSong.streamingLinks}
-            onCreditClick={handleCreditClick}
-            onClose={() => setSelectedSong(null)}
-          />
-        )}
       </main>
     </div>
   );
