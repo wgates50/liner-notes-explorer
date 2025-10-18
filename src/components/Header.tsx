@@ -1,4 +1,4 @@
-import { Music2, Layers } from "lucide-react";
+import { Archive, Layers } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
@@ -15,7 +15,7 @@ export const Header = ({ crateMode, onCrateModeToggle, onClearCache }: HeaderPro
       <div className="container mx-auto px-4 py-4 flex items-center justify-between">
         <div className="flex items-center gap-3">
           <div className="flex items-center gap-2">
-            <Music2 className="h-6 w-6 text-primary" />
+            <Archive className="h-6 w-6 text-primary" />
             <h1 className="text-2xl font-bold">Crates</h1>
           </div>
         </div>
