@@ -8,44 +8,36 @@ All colors MUST be HSL.
 
 @layer base {
   :root {
-    --background: 225 20% 6%;
-    --foreground: 228 20% 93%;
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
 
-    --card: 225 20% 8%;
-    --card-foreground: 228 20% 93%;
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
 
-    --popover: 225 20% 7%;
-    --popover-foreground: 228 20% 93%;
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
 
-    --primary: 225 50% 40%;
-    --primary-foreground: 228 20% 93%;
+    --primary: 217.2 91.2% 59.8%;
+    --primary-foreground: 222.2 47.4% 11.2%;
 
-    --secondary: 225 20% 12%;
-    --secondary-foreground: 228 20% 93%;
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
 
-    --muted: 225 15% 20%;
-    --muted-foreground: 220 10% 65%;
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
 
-    --accent: 225 50% 40%;
-    --accent-foreground: 228 20% 93%;
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: 210 40% 98%;
 
-    --destructive: 0 72% 51%;
-    --destructive-foreground: 228 20% 93%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
 
-    --border: 225 20% 15%;
-    --input: 225 20% 10%;
-    --ring: 225 50% 40%;
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 224.3 76.3% 48%;
 
-    --radius: 0.625rem;
+    --radius: 0.5rem;
 
-    /* Music app gradients */
-    --gradient-dark: linear-gradient(180deg, hsl(225 20% 6%), hsl(225 20% 4%));
-    --gradient-panel: linear-gradient(135deg, hsl(225 20% 8%), hsl(225 20% 7%));
-    
-    /* Subtle glow effects */
-    --glow-primary: 0 0 20px hsl(225 50% 40% / 0.3);
-    --glow-subtle: 0 4px 20px hsl(0 0% 0% / 0.5);
-    
     /* Smooth transitions */
     --transition-smooth: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   }
@@ -58,7 +50,6 @@ All colors MUST be HSL.
 
   body {
     @apply bg-background text-foreground;
-    background: var(--gradient-dark);
     min-height: 100vh;
   }
   
