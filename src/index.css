@@ -8,36 +8,44 @@ All colors MUST be HSL.
 
 @layer base {
   :root {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
+    --background: 0 0% 7%;
+    --foreground: 40 10% 95%;
 
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
+    --card: 0 0% 10%;
+    --card-foreground: 40 10% 95%;
 
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
+    --popover: 0 0% 8%;
+    --popover-foreground: 40 10% 95%;
 
-    --primary: 217.2 91.2% 59.8%;
-    --primary-foreground: 222.2 47.4% 11.2%;
+    --primary: 38 92% 58%;
+    --primary-foreground: 0 0% 10%;
 
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
+    --secondary: 0 0% 15%;
+    --secondary-foreground: 40 10% 95%;
 
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
+    --muted: 0 0% 18%;
+    --muted-foreground: 40 5% 60%;
 
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
+    --accent: 38 92% 58%;
+    --accent-foreground: 0 0% 10%;
 
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 40 10% 95%;
 
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 224.3 76.3% 48%;
+    --border: 0 0% 20%;
+    --input: 0 0% 18%;
+    --ring: 38 92% 58%;
 
     --radius: 0.5rem;
 
+    /* Vinyl-inspired gradients */
+    --gradient-vinyl: linear-gradient(135deg, hsl(0 0% 10%), hsl(0 0% 7%));
+    --gradient-amber: linear-gradient(135deg, hsl(38 92% 58%), hsl(38 92% 48%));
+    
+    /* Studio glow effects */
+    --glow-amber: 0 0 20px hsl(38 92% 58% / 0.3);
+    --glow-subtle: 0 4px 20px hsl(0 0% 0% / 0.5);
+    
     /* Smooth transitions */
     --transition-smooth: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   }
@@ -50,6 +58,7 @@ All colors MUST be HSL.
 
   body {
     @apply bg-background text-foreground;
+    background: linear-gradient(180deg, hsl(0 0% 7%), hsl(0 0% 5%));
     min-height: 100vh;
   }
   

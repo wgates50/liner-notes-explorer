@@ -9,6 +9,7 @@ import { toast } from "sonner";
 
 const Index = () => {
   const navigate = useNavigate();
+  const [crateMode, setCrateMode] = useState(false);
 
   const handleSearch = (query: string) => {
     if (query.trim()) {
@@ -51,6 +52,8 @@ const Index = () => {
   return (
     <div className="min-h-screen bg-background">
       <Header 
+        crateMode={crateMode} 
+        onCrateModeToggle={() => setCrateMode(!crateMode)}
         onClearCache={handleClearCache}
       />
       
