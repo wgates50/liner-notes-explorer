@@ -76,7 +76,6 @@ const Artist = () => {
   const navigate = useNavigate();
   const artistName = searchParams.get("name") || "Unknown Artist";
   
-  const [crateMode, setCrateMode] = useState(false);
   const [activeRole, setActiveRole] = useState<string>();
   const [expandedSongs, setExpandedSongs] = useState<Set<string>>(new Set());
   const [discographyType, setDiscographyType] = useState<string>("All");
@@ -135,8 +134,6 @@ const Artist = () => {
   return (
     <div className="min-h-screen bg-background">
       <Header 
-        crateMode={crateMode} 
-        onCrateModeToggle={() => setCrateMode(!crateMode)}
         onClearCache={handleClearCache}
       />
       

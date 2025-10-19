@@ -8,42 +8,42 @@ All colors MUST be HSL.
 
 @layer base {
   :root {
-    --background: 0 0% 7%;
-    --foreground: 40 10% 95%;
+    --background: 225 20% 6%;
+    --foreground: 228 20% 93%;
 
-    --card: 0 0% 10%;
-    --card-foreground: 40 10% 95%;
+    --card: 225 20% 8%;
+    --card-foreground: 228 20% 93%;
 
-    --popover: 0 0% 8%;
-    --popover-foreground: 40 10% 95%;
+    --popover: 225 20% 7%;
+    --popover-foreground: 228 20% 93%;
 
-    --primary: 38 92% 58%;
-    --primary-foreground: 0 0% 10%;
+    --primary: 225 50% 40%;
+    --primary-foreground: 228 20% 93%;
 
-    --secondary: 0 0% 15%;
-    --secondary-foreground: 40 10% 95%;
+    --secondary: 225 20% 12%;
+    --secondary-foreground: 228 20% 93%;
 
-    --muted: 0 0% 18%;
-    --muted-foreground: 40 5% 60%;
+    --muted: 225 15% 20%;
+    --muted-foreground: 220 10% 65%;
 
-    --accent: 38 92% 58%;
-    --accent-foreground: 0 0% 10%;
+    --accent: 225 50% 40%;
+    --accent-foreground: 228 20% 93%;
 
     --destructive: 0 72% 51%;
-    --destructive-foreground: 40 10% 95%;
+    --destructive-foreground: 228 20% 93%;
 
-    --border: 0 0% 20%;
-    --input: 0 0% 18%;
-    --ring: 38 92% 58%;
+    --border: 225 20% 15%;
+    --input: 225 20% 10%;
+    --ring: 225 50% 40%;
 
-    --radius: 0.5rem;
+    --radius: 0.625rem;
 
-    /* Vinyl-inspired gradients */
-    --gradient-vinyl: linear-gradient(135deg, hsl(0 0% 10%), hsl(0 0% 7%));
-    --gradient-amber: linear-gradient(135deg, hsl(38 92% 58%), hsl(38 92% 48%));
+    /* Music app gradients */
+    --gradient-dark: linear-gradient(180deg, hsl(225 20% 6%), hsl(225 20% 4%));
+    --gradient-panel: linear-gradient(135deg, hsl(225 20% 8%), hsl(225 20% 7%));
     
-    /* Studio glow effects */
-    --glow-amber: 0 0 20px hsl(38 92% 58% / 0.3);
+    /* Subtle glow effects */
+    --glow-primary: 0 0 20px hsl(225 50% 40% / 0.3);
     --glow-subtle: 0 4px 20px hsl(0 0% 0% / 0.5);
     
     /* Smooth transitions */
@@ -58,7 +58,7 @@ All colors MUST be HSL.
 
   body {
     @apply bg-background text-foreground;
-    background: linear-gradient(180deg, hsl(0 0% 7%), hsl(0 0% 5%));
+    background: var(--gradient-dark);
     min-height: 100vh;
   }
   

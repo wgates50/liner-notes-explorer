@@ -19,8 +19,6 @@ const Search = () => {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const query = searchParams.get("q") || "";
-  
-  const [crateMode, setCrateMode] = useState(false);
 
   const handleClearCache = () => {
     toast.success("Cache cleared successfully");
@@ -37,8 +35,6 @@ const Search = () => {
   return (
     <div className="min-h-screen bg-background">
       <Header 
-        crateMode={crateMode} 
-        onCrateModeToggle={() => setCrateMode(!crateMode)}
         onClearCache={handleClearCache}
       />
       
